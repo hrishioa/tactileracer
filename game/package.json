@@ -1,0 +1,9 @@
+{
+  "name": "game-socket",
+  "version": "0.0.1",
+  "description": "racing app for hack n roll",
+  "dependencies": {
+    "express": "^4.14.0",
+    "nodemon": "^1.11.0"
+  }
+}
