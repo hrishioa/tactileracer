@@ -12,13 +12,13 @@ start_time = time.time()
 pins = [2,3,4,17,27,22,11,10,9]
 
 def down(pin):
-	wiringpi.softPwmWrite(pins[pin], 23)
+	wiringpi.softPwmWrite(pins[pin], 24)
 
 def clear():
 	for i in xrange(0, 9): control(i, 0)
 
 def up(pin):
-	wiringpi.softPwmWrite(pins[pin], 17)
+	wiringpi.softPwmWrite(pins[pin], 19)
 
 def init():
 	for pin in pins:
@@ -33,7 +33,7 @@ def pulse(pin, interval):
 	if interval == 0:
 		print "Resetting..."
 		control(pin, 0)
-	
+
 	elif (int((time.time() - start_time)/interval) % 2):
 		down(pin)
 	else:

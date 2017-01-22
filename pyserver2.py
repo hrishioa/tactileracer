@@ -26,8 +26,8 @@ FUTURE_MIN_PULSE = 0.7
 CUR_LEFT_PIN = 2
 CUR_RIGHT_PIN =0
 
-FUTURE_LEFT_PIN = 8
-FUTURE_RIGHT_PIN = 6
+FUTURE_LEFT_PIN = 3
+FUTURE_RIGHT_PIN = 8
 
 running = True
 
@@ -148,6 +148,7 @@ class WebSocketsHandler(SocketServer.StreamRequestHandler):
 if __name__ == "__main__":
     SocketServer.TCPServer.allow_reuse_address = True
     server = SocketServer.TCPServer(
-        ("192.168.43.44", 9999), WebSocketsHandler)
+        ("192.168.43.180", 9999), WebSocketsHandler)
     print "Serving..."
     server.serve_forever()
+
