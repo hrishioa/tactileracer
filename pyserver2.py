@@ -21,6 +21,10 @@ CUR_RIGHT_PIN = 6
 running = True
 
 def process(input):
+
+    # testing
+    pulse(1,0.2)
+
     try:
         cur = float(input.split(",")[0])
         future = float(input.split(",")[1])
@@ -35,10 +39,7 @@ def process(input):
         else:
             up(2)
 
-        # testing
-        pulse(1,0.2)
-
-        if(running):
+        if(True):
             if(cur < CUR_LEFT_THRES):
                 pulse_v = ((1-((cur - CUR_LEFT_THRES)/(CUR_LEFT_MAX - CUR_LEFT_THRES))) * (CUR_MAX_PULSE-CUR_MIN_PULSE)) + CUR_MIN_PULSE
                 print("left pulse - "+pulse_v)
