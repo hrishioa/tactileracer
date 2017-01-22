@@ -1,10 +1,13 @@
 import wiringpi
 import json
 import urllib2
+import time
 
 wiringpi.wiringPiSetupGpio()
 wiringpi.pinMode(2, 1)
 wiringpi.softPwmCreate(2,0,100)
+
+start_time = time.time()
 
 pins = [2,3,4,17,27,22,11,10,9]
 
@@ -24,13 +27,13 @@ def init():
 
 init()
 
-def pulse(pin, times, timeout):
-	for i in xrange(0, times):
+def pulse(pin, interval):
+	if interval == 0:
+		control(pin, 0)
+	elif (int((time.time() - start)/interval) % 2):
 		down(pin)
-		wiringpi.delay(timeout)
+	else:
 		up(pin)
-		wiringpi.delay(timeout)
-
 
 def control(pin, val):
 	wiringpi.softPwmWrite(pins[pin], val)
