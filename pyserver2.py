@@ -4,59 +4,87 @@ from base64 import b64encode
 from hashlib import sha1
 from mimetools import Message
 from StringIO import StringIO
+import traceback
 
 from servo import *
 
 # Constants
 CUR_LEFT_THRES = -0.3
-CUR_LEFT_MAX = -3.0
+CUR_LEFT_MAX = -1.2
 CUR_RIGHT_THRES = 0.3
-CUR_RIGHT_MAX = -3.0
+CUR_RIGHT_MAX = 1.2
 CUR_MAX_PULSE = 0.1
-CUR_MIN_PULSE = 1.0
+CUR_MIN_PULSE = 0.5
 
-CUR_LEFT_PIN = 4
-CUR_RIGHT_PIN = 6
+FUTURE_LEFT_THRES = 0
+FUTURE_LEFT_MAX = -4
+FUTURE_RIGHT_THRES = 0
+FUTURE_RIGHT_MAX = 4
+FUTURE_MAX_PULSE = 0.1
+FUTURE_MIN_PULSE = 0.7
+
+CUR_LEFT_PIN = 2
+CUR_RIGHT_PIN =0
+
+FUTURE_LEFT_PIN = 8
+FUTURE_RIGHT_PIN = 6
 
 running = True
 
 def process(input):
 
     # testing
-    pulse(1,0.2)
+    # pulse(1,0.2)
 
     try:
         cur = float(input.split(",")[0])
         future = float(input.split(",")[1])
         print "Current - %f, Future - %f" % (cur, future)
-        if(cur < -0.3):
-            down(0)
-        else:
-            up(0)
+        # if(cur < -0.3):
+        #     down(0)
+        # else:
+        #     up(0)
 
-        if(cur > 0.3):
-            down(2)
-        else:
-            up(2)
+        # if(cur > 0.3):
+        #     down(2)
+        # else:
+        #     up(2)
 
         if(True):
             if(cur < CUR_LEFT_THRES):
-                pulse_v = ((1-((cur - CUR_LEFT_THRES)/(CUR_LEFT_MAX - CUR_LEFT_THRES))) * (CUR_MAX_PULSE-CUR_MIN_PULSE)) + CUR_MIN_PULSE
-                print("left pulse - "+pulse_v)
-                # pulse(CUR_LEFT_PIN, pulse_v)
-                # pulse(CUR_RIGHT_PIN, 0)
+                pulse_v = ((((cur - CUR_LEFT_THRES)/(CUR_LEFT_MAX - CUR_LEFT_THRES))) * (CUR_MAX_PULSE-CUR_MIN_PULSE)) + CUR_MIN_PULSE
+                print("left pulse - %f" % pulse_v)
+                pulse(CUR_LEFT_PIN, pulse_v)
+                pulse(CUR_RIGHT_PIN, 0)
             elif(cur > CUR_RIGHT_THRES):
-                pulse_v = ((1-((cur - CUR_RIGHT_THRES)/(CUR_RIGHT_MAX - CUR_RIGHT_THRES))) * (CUR_MAX_PULSE-CUR_MIN_PULSE)) + CUR_MIN_PULSE
-                print("right pulse - "+pulse_v)
-                # pulse(CUR_RIGHT_PIN, pulse_v)
-                # pulse(CUR_LEFT_PIN, 0)
+                pulse_v = ((((cur - CUR_RIGHT_THRES)/(CUR_RIGHT_MAX - CUR_RIGHT_THRES))) * (CUR_MAX_PULSE-CUR_MIN_PULSE)) + CUR_MIN_PULSE
+                print("right pulse - %f " % pulse_v)
+                pulse(CUR_RIGHT_PIN, pulse_v)
+                pulse(CUR_LEFT_PIN, 0)
             else:
-                pass
-                # pulse(CUR_LEFT_PIN, 0)
-                # pulse(CUR_RIGHT_PIN, 0)
+                pulse(CUR_LEFT_PIN, 0)
+                pulse(CUR_RIGHT_PIN, 0)
 
-    except:
-        pass
+            if(future < FUTURE_LEFT_THRES):
+                print "Future left"
+                f_pulse_v = ((((future - FUTURE_LEFT_THRES)/(FUTURE_LEFT_MAX - FUTURE_LEFT_THRES))) * (FUTURE_MAX_PULSE-FUTURE_MIN_PULSE)) + FUTURE_MIN_PULSE
+                print("future left pulse - %f" % f_pulse_v)
+                pulse(FUTURE_LEFT_PIN, f_pulse_v)
+                pulse(FUTURE_RIGHT_PIN, 0)
+            elif(future > FUTURE_RIGHT_THRES):
+                print "Future right"
+                f_pulse_v = ((((future - FUTURE_RIGHT_THRES)/(FUTURE_RIGHT_MAX - FUTURE_RIGHT_THRES))) * (FUTURE_MAX_PULSE-FUTURE_MIN_PULSE)) + FUTURE_MIN_PULSE
+                print("right pulse - %f " % f_pulse_v)
+                pulse(FUTURE_RIGHT_PIN, f_pulse_v)
+                pulse(FUTURE_LEFT_PIN, 0)
+            else:
+                print "Future null"
+                pulse(FUTURE_LEFT_PIN, 0)
+                pulse(FUTURE_RIGHT_PIN, 0)
+
+    except Exception as e:
+        print e
+        traceback.print_exc()
 
 
 class WebSocketsHandler(SocketServer.StreamRequestHandler):

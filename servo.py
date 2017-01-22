@@ -29,10 +29,11 @@ init()
 
 def pulse(pin, interval):
 	print "Pulsing... start_time = %f" % start_time
-	print "Pulse - %d" % (int((time.time() - start_time)/interval) % 2)
+
 	if interval == 0:
 		print "Resetting..."
 		control(pin, 0)
+	
 	elif (int((time.time() - start_time)/interval) % 2):
 		down(pin)
 	else:
