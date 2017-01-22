@@ -7,6 +7,19 @@ from StringIO import StringIO
 
 from servo import *
 
+# Constants
+CUR_LEFT_THRES = -0.3
+CUR_LEFT_MAX = -3.0
+CUR_RIGHT_THRES = 0.3
+CUR_RIGHT_MAX = -3.0
+CUR_MAX_PULSE = 0.1
+CUR_MIN_PULSE = 1.0
+
+CUR_LEFT_PIN = 4
+CUR_RIGHT_PIN = 6
+
+running = True
+
 def process(input):
     try:
         cur = float(input.split(",")[0])
@@ -21,6 +34,25 @@ def process(input):
             down(2)
         else:
             up(2)
+
+        # testing
+        pulse(1,0.2)
+
+        if(running):
+            if(cur < CUR_LEFT_THRES):
+                pulse_v = ((1-((cur - CUR_LEFT_THRES)/(CUR_LEFT_MAX - CUR_LEFT_THRES))) * (CUR_MAX_PULSE-CUR_MIN_PULSE)) + CUR_MIN_PULSE
+                print("left pulse - "+pulse_v)
+                # pulse(CUR_LEFT_PIN, pulse_v)
+                # pulse(CUR_RIGHT_PIN, 0)
+            elif(cur > CUR_RIGHT_THRES):
+                pulse_v = ((1-((cur - CUR_RIGHT_THRES)/(CUR_RIGHT_MAX - CUR_RIGHT_THRES))) * (CUR_MAX_PULSE-CUR_MIN_PULSE)) + CUR_MIN_PULSE
+                print("right pulse - "+pulse_v)
+                # pulse(CUR_RIGHT_PIN, pulse_v)
+                # pulse(CUR_LEFT_PIN, 0)
+            else:
+                pass
+                # pulse(CUR_LEFT_PIN, 0)
+                # pulse(CUR_RIGHT_PIN, 0)
 
     except:
         pass
