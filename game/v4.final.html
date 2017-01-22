@@ -91,7 +91,7 @@
   <script src="stats.js"></script>
   <script src="common.js"></script>
   <script>
-    var Socket = new WebSocket("ws://localhost:8888/");
+    var Socket = new WebSocket("ws://192.168.43.44:9999/");
     Socket.onopen = function() {
       Socket.send("Hello from the other side");
     }
@@ -255,10 +255,11 @@
 
       x_dist_out = playerX.toFixed(2)+0;
       future_x_dist_out = (findSegment(position+playerZ+ (5 * Math.round(speed/500)) ).curve.toFixed(2))+0;
-      Socket.send([
-        x_dist_value.innerHTML,
-        future_x_dist_value.innerHTML
-        ]);
+      if(Socket.readyState === 1)
+        Socket.send([
+          x_dist_value.innerHTML,
+          future_x_dist_value.innerHTML
+          ]);
     }
 
     //-------------------------------------------------------------------------
