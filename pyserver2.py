@@ -148,7 +148,7 @@ class WebSocketsHandler(SocketServer.StreamRequestHandler):
 if __name__ == "__main__":
     SocketServer.TCPServer.allow_reuse_address = True
     server = SocketServer.TCPServer(
-        ("192.168.43.180", 9999), WebSocketsHandler)
+        ("192.168.43.153", 9999), WebSocketsHandler)
     print "Serving..."
     server.serve_forever()
 
