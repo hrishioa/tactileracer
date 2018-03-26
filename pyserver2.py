@@ -5,6 +5,13 @@ from hashlib import sha1
 from mimetools import Message
 from StringIO import StringIO
 import traceback
+import csv
+import time
+
+csvfilename = "run"+str(time.time()*1000.0)+".csv"
+
+with open(csvfilename, 'a') as of:
+    of.write('timestamp,current,future\n')
 
 from servo import *
 
@@ -31,6 +38,7 @@ FUTURE_RIGHT_PIN = 8
 
 running = True
 
+
 def process(input):
 
     # testing
@@ -40,6 +48,10 @@ def process(input):
         cur = float(input.split(",")[0])
         future = float(input.split(",")[1])
         print "Current - %f, Future - %f" % (cur, future)
+
+        with open(csvfilename, 'a') as of:
+            of.write("%f,%f,%f"% (time.time()*1000,cur,future))
+
         # if(cur < -0.3):
         #     down(0)
         # else:
@@ -151,4 +163,3 @@ if __name__ == "__main__":
         ("192.168.43.153", 9999), WebSocketsHandler)
     print "Serving..."
     server.serve_forever()
-
